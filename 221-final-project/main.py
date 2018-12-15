@@ -66,16 +66,6 @@ def get_models(assignments, songData, curr_num_centroids):
 	v_train = [DictVectorizer(sparse=True) for _ in range(curr_num_centroids)]
 	song_data_by_centroid = [(v_train[i].fit_transform(D[0]), D[1]) for i, D in enumerate(song_data_by_centroid)]
 	models = []
-	print('YOUR FEATURE VEC IS {} FEATURES LONG'.format(len(song_data_by_centroid)))
-	print('YOUR FEATURE VEC IS {} FEATURES LONG'.format(len(song_data_by_centroid)))
-	print('YOUR FEATURE VEC IS {} FEATURES LONG'.format(len(song_data_by_centroid)))
-	print('YOUR FEATURE VEC IS {} FEATURES LONG'.format(len(song_data_by_centroid)))
-	print('YOUR FEATURE VEC IS {} FEATURES LONG'.format(len(song_data_by_centroid)))
-	print('YOUR FEATURE VEC IS {} FEATURES LONG'.format(len(song_data_by_centroid)))
-	print('YOUR FEATURE VEC IS {} FEATURES LONG'.format(len(song_data_by_centroid)))
-	print('YOUR FEATURE VEC IS {} FEATURES LONG'.format(len(song_data_by_centroid)))
-	print('YOUR FEATURE VEC IS {} FEATURES LONG'.format(len(curr_feature_dict)))
-	time.sleep(10)
 	for data in song_data_by_centroid:
 		m = LogisticRegression()
 		try:
@@ -306,11 +296,6 @@ def main():
 					distances = [(np.linalg.norm(c-X), i) for i, c in enumerate(centroids)]
 					closest_c = min(distances, key=lambda x: x[0])
 					testAssignments.append(closest_c[1])
-
-				# for m in models:
-				# 	print(type(m.coef_))
-				# 	print(m.coef_.shape)
-				# time.sleep(15)
 
 				print("Test Assignments: \n {}".format(testAssignments))
 				avg_diff = 0
