@@ -16,7 +16,7 @@ from k_means import k_means_vectorized
 import string, time
 from sklearn.feature_extraction import DictVectorizer
 print('imported')
-
+#need to push
 num_centroids = 8 #Move back to 18
 api = genius.Genius("VVjnq1C3_tUwoQEOpt3rkCEaWCENVvGkCvHKwEfK7ZqnNrth6OTuzl4nAX2lC88w")
 
@@ -65,8 +65,17 @@ def get_models(assignments, songData, curr_num_centroids):
 
 	v_train = [DictVectorizer(sparse=True) for _ in range(curr_num_centroids)]
 	song_data_by_centroid = [(v_train[i].fit_transform(D[0]), D[1]) for i, D in enumerate(song_data_by_centroid)]
-
 	models = []
+	print('YOUR FEATURE VEC IS {} FEATURES LONG'.format(len(song_data_by_centroid)))
+	print('YOUR FEATURE VEC IS {} FEATURES LONG'.format(len(song_data_by_centroid)))
+	print('YOUR FEATURE VEC IS {} FEATURES LONG'.format(len(song_data_by_centroid)))
+	print('YOUR FEATURE VEC IS {} FEATURES LONG'.format(len(song_data_by_centroid)))
+	print('YOUR FEATURE VEC IS {} FEATURES LONG'.format(len(song_data_by_centroid)))
+	print('YOUR FEATURE VEC IS {} FEATURES LONG'.format(len(song_data_by_centroid)))
+	print('YOUR FEATURE VEC IS {} FEATURES LONG'.format(len(song_data_by_centroid)))
+	print('YOUR FEATURE VEC IS {} FEATURES LONG'.format(len(song_data_by_centroid)))
+	print('YOUR FEATURE VEC IS {} FEATURES LONG'.format(len(curr_feature_dict)))
+	time.sleep(10)
 	for data in song_data_by_centroid:
 		m = LogisticRegression()
 		try:
@@ -164,17 +173,19 @@ def load_train_data(testing=False):
 	song_set = []
 
 	#if testing set to false, write to the train file, else write to the test file
-	if not testing: file = 'train_song_data_' + 'final' + '.pkl'
+	# if not testing: file = 'train_song_data_' + 'final' + '.pkl'
+	if not testing: file = 'train_song_data_final.pkl'
 	else: file = 'test_sample.pkl'
 
 
 	with open(file, 'rb') as unpkl:
-		while True:
+		while len(song_set) <= 1000:
 			try:
 				dumped = pickle.load(unpkl)
 			except EOFError:break
 			else:
 				for a in dumped:
+					if len(song_set) >= 1000: break
 					cur_name = a[0]['name']
 					cur_artist = a[0]['artists'][0]['name']
 
@@ -209,6 +220,9 @@ def main():
 	# 	print(type(pickle.load(unpkl)))
 	# 	trainSongData = pickle.load(unpkl)
 	trainSongData = load_train_data()
+
+	# with open('small_song_train_song_data.pkl', 'ab') as pkl:
+	# 	pickle.dump(trainSongData, pkl)
 
 	# # Get features after lyrics in order to filter trainSongs for just those
 	# # lyrics
@@ -260,10 +274,10 @@ def main():
 			kmeans_feature_vecs = np.vstack((kmeans_feature_vecs, X))
 	topk = []
 	for ___ in range(1):
-		for curr_num_centroids in range(6, 20, 2):
+		for curr_num_centroids in [7, 7, 9, 10, 11, 12]:
 		# for curr_num_centroids in range(6, 20, 2):
 			num_centroids = curr_num_centroids
-			print('\n \n \n \n \n \n ***********************************************************************************')
+			print('\n \n \n \n \n \n***********************************************************************************')
 			print('                                    k = {}                                         '.format(num_centroids))
 			print('*********************************************************************************** \n \n \n \n \n \n')
 			trials = []
@@ -293,6 +307,11 @@ def main():
 					closest_c = min(distances, key=lambda x: x[0])
 					testAssignments.append(closest_c[1])
 
+				# for m in models:
+				# 	print(type(m.coef_))
+				# 	print(m.coef_.shape)
+				# time.sleep(15)
+
 				print("Test Assignments: \n {}".format(testAssignments))
 				avg_diff = 0
 				v_test = DictVectorizer(sparse=True)
@@ -304,6 +323,7 @@ def main():
 					[unpack_feature_data(testSongData[song_i][0], testSongData[song_i][1], train_keys=train_keys[centroid_i], isTest=True), all_key_entries[centroid_i]]))[0]
 					test_popularity = mult_round(testSongData[song_i][2])
 					avg_diff += abs(pred_popularity - test_popularity)
+					print('Current song name:{}, by:{}'.format(testSongData[song_i][0]['name'], testSongData[song_i][0]['artists'][0]['name']))
 					print("Predicted: {} \n Actual: {}\n".format(pred_popularity, test_popularity))
 				print("Average diff: {}".format(float(avg_diff)/len(testAssignments)))
 				trials.append(float(avg_diff)/len(testAssignments))
