@@ -164,7 +164,7 @@ def load_train_data(testing=False):
 
 	#if testing set to false, write to the train file, else write to the test file
 	# if not testing: file = 'train_song_data_' + 'final' + '.pkl'
-	if not testing: file = 'train_song_data_final.pkl'
+	if not testing: file = 'small_song_train_song_data.pkl'
 	else: file = 'test_sample.pkl'
 
 
